@@ -47,6 +47,24 @@ namespace task_cli
             tasks.Add(newTask);
             SaveTasks();
             Console.WriteLine($"Task added successfully (ID: {newTask.Id})");
+            Console.WriteLine();
+        }
+        public void UpdateTask(int id, string newDescription)
+        {
+            var task = tasks.Find(task => task.Id == id);
+            if (task == null)
+            {
+                Console.WriteLine("Task with ID: " + id + " not found");
+                return;
+            }
+            else
+            {
+                task.Description = newDescription;
+                task.UpdatedAt = DateTime.Now;
+                SaveTasks();
+                Console.WriteLine("Task with ID: " + id + " updated successfully");
+            }
+            Console.WriteLine();
         }
         public void ListTasks()
         {
@@ -58,6 +76,40 @@ namespace task_cli
             else
             {
                 foreach (var task in tasks)
+                {
+                    Console.WriteLine(task.Id + "." + " " + task.Description + ":" + " " + "[" + " " + task.Status + " " + "]");
+                }
+                Console.WriteLine();
+            }
+        }
+        public void ListDoneTasks()
+        {
+            var doneTasks = tasks.FindAll(task => task.Status == TaskStatus.Done);
+            if (doneTasks.Count == 0)
+            {
+                Console.WriteLine("No done tasks found");
+                return;
+            }
+            else
+            {
+                foreach (var task in doneTasks)
+                {
+                    Console.WriteLine(task.Id + "." + " " + task.Description + ":" + " " + "[" + " " + task.Status + " " + "]");
+                }
+                Console.WriteLine();
+            }
+        }
+        public void ListInProgressTasks()
+        {
+            var inProgressTasks = tasks.FindAll(task => task.Status == TaskStatus.InProgress);
+            if (inProgressTasks.Count == 0)
+            {
+                Console.WriteLine("No in-progress tasks found");
+                return;
+            }
+            else
+            {
+                foreach (var task in inProgressTasks)
                 {
                     Console.WriteLine(task.Id + "." + " " + task.Description + ":" + " " + "[" + " " + task.Status + " " + "]");
                 }
@@ -78,6 +130,7 @@ namespace task_cli
                 SaveTasks();
                 Console.WriteLine("Task with ID: " + id + " deleted successfully");
             }
+            Console.WriteLine();
         }
         public void MarkTaskAsDone(int id)
         {
@@ -94,6 +147,7 @@ namespace task_cli
                 SaveTasks();
                 Console.WriteLine("Task with ID: " + id + " marked as done");
             }
+            Console.WriteLine();
         }
         public void MarkTaskAsInProgress(int id)
         {
@@ -110,6 +164,7 @@ namespace task_cli
                 SaveTasks();
                 Console.WriteLine("Task with ID: " + id + " marked as in progress");
             }
+            Console.WriteLine();
         }
     }
 }
